@@ -11,7 +11,8 @@ class SosPage extends StatefulWidget {
 
 class _SosPageState extends State<SosPage> {
   final Color primaryGreen = const Color(0xFF287D36);
-  final Color backgroundColor = const Color(0xFFF7F8F2);
+  final Color sosRed = const Color(0xFFB3261E);
+  final Color backgroundColor = const Color(0xFFFFF8F6);
 
   String selectedMode = 'Online';
   bool isHolding = false;
@@ -80,262 +81,292 @@ class _SosPageState extends State<SosPage> {
     );
   }
 
-  // HALAMAN UTAMA SOS
+  // HALAMAN UTAMA SOS — disesuaikan dengan desain referensi
   Widget buildSosPage() {
-    return Column(
-      children: [
-        buildHeader('SOS'),
-
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(22),
-            child: Column(
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 54,
+            child: Row(
               children: [
-                const SizedBox(height: 25),
-
-                Icon(
-                  Icons.health_and_safety_outlined,
-                  size: 75,
-                  color: primaryGreen,
-                ),
-
-                const SizedBox(height: 15),
-
-                const Text(
-                  'Butuh Bantuan Darurat?',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                const Text(
-                  'Kirim sinyal SOS jika kamu mengalami keadaan darurat saat pendakian.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black54,
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Pilih Mode Pengiriman',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: modeButton(
-                        'Online',
-                        Icons.wifi,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: modeButton(
-                        'Offline',
-                        Icons.wifi_off,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 35),
-
-                const Text(
-                  'Tekan dan tahan tombol di bawah selama 5 detik',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black54,
-                  ),
-                ),
-
-                const SizedBox(height: 22),
-
-                GestureDetector(
-                  onTapDown: (_) => startHolding(),
-                  onTapUp: (_) => stopHolding(),
-                  onTapCancel: stopHolding,
-                  child: Container(
-                    width: 165,
-                    height: 165,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFC62828),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.red.withOpacity(0.20),
-                          blurRadius: 18,
-                          spreadRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: CircularProgressIndicator(
-                            value: holdProgress,
-                            strokeWidth: 5,
-                            backgroundColor: Colors.white24,
-                            valueColor:
-                                const AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        ),
-
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.warning_rounded,
-                              color: Colors.white,
-                              size: 42,
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'SOS',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              isHolding
-                                  ? '${(holdProgress * 5).ceil()} / 5 detik'
-                                  : 'Tahan 5 detik',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                const Text(
-                  'Pastikan kamu berada di lokasi yang aman.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEEF1ED),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: const Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Gunakan fitur SOS hanya dalam keadaan darurat.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                IconButton(
+                  onPressed: () => Navigator.maybePop(context),
+                  icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                  color: const Color(0xFF332F2E),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(17, 12, 17, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 4),
+                  Center(
+                    child: Container(
+                      width: 92,
+                      height: 92,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFFCEAE7),
+                        boxShadow: [
+                          BoxShadow(
+                            color: sosRed.withOpacity(0.06),
+                            blurRadius: 3,
+                            spreadRadius: 7,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: sosRed,
+                            boxShadow: [
+                              BoxShadow(
+                                color: sosRed.withOpacity(0.16),
+                                blurRadius: 12,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'SOS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 17),
+                  const Text(
+                    'Kirim SOS?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF8F211C),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 7),
+                  const Text(
+                    'Koordinat terakhir dan profil keselamatanmu akan dikirim ke server dan kontak darurat.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      height: 1.55,
+                      color: Color(0xFF77716F),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: const Color(0xFFE7E1DF)),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x0A000000),
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: const Column(
+                      children: [
+                        Text(
+                          'KOORDINAT TERAKHIR',
+                          style: TextStyle(fontSize: 8, color: Color(0xFF77716F)),
+                        ),
+                        SizedBox(height: 7),
+                        Text(
+                          '-6.7710, 106.9867',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF202827)),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Akurasi ± 6 m • sekarang',
+                          style: TextStyle(fontSize: 9, color: Color(0xFF898381)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+                  const Text(
+                    'Kontak yang akan diberi tahu',
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF302B2A)),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Container(
+                        width: 37,
+                        height: 37,
+                        decoration: const BoxDecoration(color: Color(0xFFDDEEDD), shape: BoxShape.circle),
+                        alignment: Alignment.center,
+                        child: const Text('DP', style: TextStyle(color: Color(0xFF286334), fontWeight: FontWeight.bold, fontSize: 10)),
+                      ),
+                      const SizedBox(width: 9),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Dina Pratama', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF5D5755))),
+                            SizedBox(height: 3),
+                            Text('Kontak utama • +62 813 8877 2100', style: TextStyle(fontSize: 8.5, color: Color(0xFF817B79))),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 9),
+                  Row(
+                    children: [
+                      Expanded(child: modeButton('Online', Icons.wifi)),
+                      const SizedBox(width: 7),
+                      Expanded(child: modeButton('Offline', Icons.wifi_off)),
+                    ],
+                  ),
+                  const SizedBox(height: 9),
+                  GestureDetector(
+                    onTapDown: (_) => startHolding(),
+                    onTapUp: (_) => stopHolding(),
+                    onTapCancel: stopHolding,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 120),
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: sosRed,
+                        borderRadius: BorderRadius.circular(13),
+                        boxShadow: [
+                          BoxShadow(color: sosRed.withOpacity(0.17), blurRadius: 12, offset: const Offset(0, 4)),
+                        ],
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (isHolding)
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(13),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: FractionallySizedBox(
+                                    widthFactor: holdProgress.clamp(0.0, 1.0),
+                                    child: Container(color: const Color(0xFF8E1914)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          Center(
+                            child: Text(
+                              sosSent
+                                  ? 'SOS Terkirim (Simulasi)'
+                                  : isHolding
+                                      ? 'Tahan ${(5 - holdProgress * 5).ceil()} detik lagi...'
+                                      : 'Tahan 5 detik untuk Kirim SOS',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  TextButton(
+                    onPressed: () {
+                      holdTimer?.cancel();
+                      setState(() {
+                        isHolding = false;
+                        holdProgress = 0;
+                        sosSent = false;
+                      });
+                      Navigator.maybePop(context);
+                    },
+                    style: TextButton.styleFrom(foregroundColor: primaryGreen),
+                    child: const Text('Batalkan', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                  const SizedBox(height: 13),
+                  Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(color: const Color(0xFFFFEAE7), borderRadius: BorderRadius.circular(12)),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: Color(0xFFB3261E), size: 19),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Penting', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Color(0xFF8F211C))),
+                              SizedBox(height: 3),
+                              Text(
+                                'SOS adalah fitur pendukung dan bukan pengganti layanan penyelamatan resmi.',
+                                style: TextStyle(fontSize: 8, height: 1.45, color: Color(0xFF8A514D)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // TOMBOL ONLINE DAN OFFLINE
+  // PILIHAN MODE ONLINE / OFFLINE
   Widget modeButton(String mode, IconData icon) {
-    bool isSelected = selectedMode == mode;
-
+    final bool isSelected = selectedMode == mode;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedMode = mode;
-        });
-
+        setState(() => selectedMode = mode);
         if (mode == 'Offline') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Mode Offline belum terhubung dengan pengiriman SOS.',
-              ),
-            ),
+            const SnackBar(content: Text('Mode Offline aktif untuk simulasi. Pengiriman SOS tidak benar-benar dilakukan.')),
           );
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        height: 35,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected
-              ? primaryGreen.withOpacity(0.12)
-              : Colors.white,
-          borderRadius: BorderRadius.circular(13),
+          color: isSelected ? const Color(0xFFFFECE9) : Colors.white,
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected
-                ? primaryGreen
-                : Colors.black12,
-            width: isSelected ? 1.5 : 1,
+            color: isSelected ? sosRed : const Color(0xFFE6E1DF),
+            width: isSelected ? 1 : 0.9,
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isSelected
-                  ? primaryGreen
-                  : Colors.black54,
-              size: 19,
-            ),
-            const SizedBox(width: 7),
-            Text(
-              mode,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isSelected
-                    ? primaryGreen
-                    : Colors.black54,
-              ),
-            ),
-          ],
+        child: Text(
+          mode.toUpperCase(),
+          style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.bold,
+            color: isSelected ? const Color(0xFF8F211C) : const Color(0xFF393433),
+          ),
         ),
       ),
     );
