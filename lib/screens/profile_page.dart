@@ -4,12 +4,15 @@ import 'jelajah_page.dart';
 import 'history_page.dart';
 import 'statistik_page.dart';
 
+// Warna utama aplikasi digunakan untuk konsistensi tampilan seluruh page.
 const Color green = Color(0xFF195C27);
 const Color lightGreen = Color(0xFFEAF5EC);
 const Color background = Color(0xFFF8F8F2);
 const Color textColor = Color(0xFF183020);
 const Color greyColor = Color(0xFF89928C);
 
+/// Halaman profil pengguna yang menampilkan data akun, pengaturan, dan akses menu tambahan.
+/// Bagian ini berfungsi sebagai pusat informasi personal pengguna sebelum masuk ke fitur pendakian.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -18,15 +21,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // Index 3 menandakan tab "Profil" sedang aktif pada bottom navigation.
+  // Jika tombol lain ditekan, maka navigasi akan berpindah ke halaman lain.
   int selectedIndex = 3;
   bool darkMode = false;
 
+  /// Menampilkan notifikasi singkat di bagian bawah layar.
   void showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
 
+  /// Navigasi antar tab utama: Beranda, Jelajah, Riwayat, dan Profil.
+  /// Profil sendiri tidak memindah halaman karena tab ini sedang aktif.
   void navigateTo(int index) {
     if (index == 0) {
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -47,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  /// Membuka halaman detail profil keselamatan untuk data identitas dan kontak darurat.
   void openSafetyProfile() {
     Navigator.push(
       context,
@@ -56,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Membuka halaman statistik pendakian agar pengguna bisa melihat aktivitasnya.
   void openStatistics() {
     Navigator.push(
       context,
@@ -65,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Validasi sebelum logout: menampilkan dialog konfirmasi agar pengguna tidak keluar secara tidak sengaja.
   void confirmLogout() {
     showDialog(
       context: context,
@@ -152,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SafeArea(
         child: Column(
           children: [
-            // HEADER
+            // HEADER: bagian paling atas berisi judul halaman profil dan tombol mode gelap.
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
@@ -193,14 +204,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-            // PROFILE CONTENT
+            // PROFILE CONTENT: area utama berisi data akun, menu pengaturan, dan tombol aksi penting.
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // USER INFORMATION
+                    // USER INFORMATION: kartu identitas pengguna seperti nama, email, dan status role.
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(18),
@@ -274,6 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     const SizedBox(height: 22),
 
+                    // Pengaturan akun berisi menu yang berkaitan dengan keamanan, notifikasi, dan statistik.
                     Text(
                       'Pengaturan Akun',
                       style: TextStyle(
@@ -317,6 +329,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     const SizedBox(height: 20),
 
+                    // Akses pengguna menampilkan peran yang mungkin dipilih oleh user seperti ranger atau admin.
                     Text(
                       'Akses Pengguna',
                       style: TextStyle(
@@ -353,7 +366,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     const SizedBox(height: 20),
 
-                    // AUTOMATIC SYNC
+                    // AUTOMATIC SYNC: informasi bahwa data pendakian sudah tersinkronisasi secara otomatis.
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(15),
@@ -405,7 +418,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     const SizedBox(height: 20),
 
-                    // LOGOUT
+                    // LOGOUT: tombol paling penting untuk keluar dari akun dengan konfirmasi tambahan.
                     SizedBox(
                       width: double.infinity,
                       height: 49,
@@ -466,7 +479,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-// MENU ITEM MODEL
+/// Model data untuk setiap item menu di profil.
+/// Setiap item berisi icon, judul, dan keterangan singkat yang ditampilkan pada kartu menu.
 class MenuItem {
   final IconData icon;
   final String title;
@@ -479,7 +493,8 @@ class MenuItem {
   });
 }
 
-// REUSABLE MENU CARD
+/// Kartu reusable yang menampilkan daftar menu dengan efek klik dan pembatas antar item.
+/// Digunakan untuk mengelompokkan menu akun dan akses pengguna agar tampilan lebih konsisten.
 class MenuCard extends StatelessWidget {
   final List<MenuItem> items;
   final Function(int) onTap;
@@ -577,16 +592,19 @@ class MenuCard extends StatelessWidget {
   }
 }
 
-// SAFETY PROFILE PAGE
+/// Halaman detail profil keselamatan.
+/// Di sini terdapat data kontak darurat, status verifikasi, dan informasi keamanan pendaki.
 class SafetyProfilePage extends StatelessWidget {
   const SafetyProfilePage({super.key});
 
+  /// Menampilkan snackbar di halaman profil keselamatan untuk memberi tahu aksi yang sedang berjalan.
   void showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
 
+  /// Widget helper untuk menampilkan baris informasi seperti nomor telepon dan status verifikasi.
   Widget infoRow(IconData icon, String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 11),
@@ -655,7 +673,7 @@ class SafetyProfilePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // HEADER
+            // HEADER: tombol kembali dan judul halaman profil keselamatan.
             SizedBox(
               height: 60,
               child: Row(
@@ -679,14 +697,14 @@ class SafetyProfilePage extends StatelessWidget {
               ),
             ),
 
-            // CONTENT
+            // CONTENT: semua detail penting untuk keamanan pendaki seperti identitas, kontak darurat, dan verifikasi akun.
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // PROFILE CARD
+                    // PROFILE CARD: ringkasan identitas utama pendaki dengan status verifikasi.
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(17),
@@ -762,6 +780,7 @@ class SafetyProfilePage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
+                    // Informasi identitas berisi data dasar yang penting untuk keperluan keamanan dan verifikasi akun.
                     const Text(
                       'Informasi Identitas',
                       style: TextStyle(
@@ -812,6 +831,7 @@ class SafetyProfilePage extends StatelessWidget {
 
                     const SizedBox(height: 17),
 
+                    // Kontak darurat adalah data utama yang dipakai saat pendaki sedang dalam kondisi darurat.
                     const Text(
                       'Kontak Darurat',
                       style: TextStyle(
@@ -926,6 +946,7 @@ class SafetyProfilePage extends StatelessWidget {
 
                     const SizedBox(height: 17),
 
+                    // Verifikasi akun menunjukkan tahap proses validasi user sebelum bisa menggunakan fitur tertentu.
                     const Text(
                       'Verifikasi Akun',
                       style: TextStyle(
@@ -1015,7 +1036,7 @@ class SafetyProfilePage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    // SECURITY NOTE
+                    // SECURITY NOTE: catatan penting untuk menjelaskan fungsi data keselamatan pendaki.
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(14),
