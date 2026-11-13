@@ -109,7 +109,7 @@ class _StatGrid extends StatelessWidget {
             Expanded(
               child: _StatCard(
                 icon: Icons.trending_up,
-                value: '9.840 m',
+                value: '9.800 m',
                 label: 'Total ketinggian',
               ),
             ),
