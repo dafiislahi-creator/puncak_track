@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -76,497 +75,89 @@ class _SosPageState extends State<SosPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: sosSent ? buildStatusPage() : buildSosPage(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final bool isTablet = constraints.maxWidth >= 600;
+            final bool isWideTablet = constraints.maxWidth >= 840;
+
+            return sosSent
+                ? buildStatusPage(isTablet: isTablet, isWideTablet: isWideTablet)
+                : buildSosPage(isTablet: isTablet, isWideTablet: isWideTablet);
+          },
+        ),
       ),
     );
   }
 
-  // HALAMAN UTAMA SOS — disesuaikan dengan desain referensi
-  Widget buildSosPage() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 54,
+  // ===========================================================================
+  // HALAMAN UTAMA SOS (ADAPTIVE)
+  // ===========================================================================
+  Widget buildSosPage({
+    required bool isTablet,
+    required bool isWideTablet,
+  }) {
+    return Column(
+      children: [
+        // Top Bar
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: isTablet ? 16 : 8),
+          child: SizedBox(
+            height: isTablet ? 64 : 54,
             child: Row(
               children: [
                 IconButton(
                   onPressed: () => Navigator.maybePop(context),
-                  icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                  icon: Icon(Icons.arrow_back_ios_new, size: isTablet ? 22 : 20),
                   color: const Color(0xFF332F2E),
                 ),
+                if (isTablet)
+                  const Text(
+                    'Panggilan Darurat SOS',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF332F2E),
+                    ),
+                  ),
               ],
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(17, 12, 17, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 4),
-                  Center(
-                    child: Container(
-                      width: 92,
-                      height: 92,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFFCEAE7),
-                        boxShadow: [
-                          BoxShadow(
-                            color: sosRed.withOpacity(0.06),
-                            blurRadius: 3,
-                            spreadRadius: 7,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: sosRed,
-                            boxShadow: [
-                              BoxShadow(
-                                color: sosRed.withOpacity(0.16),
-                                blurRadius: 12,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'SOS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 17),
-                  const Text(
-                    'Kirim SOS?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF8F211C),
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 7),
-                  const Text(
-                    'Koordinat terakhir dan profil keselamatanmu akan dikirim ke server dan kontak darurat.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      height: 1.55,
-                      color: Color(0xFF77716F),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: const Color(0xFFE7E1DF)),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x0A000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: const Column(
-                      children: [
-                        Text(
-                          'KOORDINAT TERAKHIR',
-                          style: TextStyle(fontSize: 8, color: Color(0xFF77716F)),
-                        ),
-                        SizedBox(height: 7),
-                        Text(
-                          '-6.7710, 106.9867',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF202827)),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Akurasi ± 6 m • sekarang',
-                          style: TextStyle(fontSize: 9, color: Color(0xFF898381)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  const Text(
-                    'Kontak yang akan diberi tahu',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF302B2A)),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Container(
-                        width: 37,
-                        height: 37,
-                        decoration: const BoxDecoration(color: Color(0xFFDDEEDD), shape: BoxShape.circle),
-                        alignment: Alignment.center,
-                        child: const Text('DP', style: TextStyle(color: Color(0xFF286334), fontWeight: FontWeight.bold, fontSize: 10)),
-                      ),
-                      const SizedBox(width: 9),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Dina Pratama', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF5D5755))),
-                            SizedBox(height: 3),
-                            Text('Kontak utama • +62 813 8877 2100', style: TextStyle(fontSize: 8.5, color: Color(0xFF817B79))),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 9),
-                  Row(
-                    children: [
-                      Expanded(child: modeButton('Online', Icons.wifi)),
-                      const SizedBox(width: 7),
-                      Expanded(child: modeButton('Offline', Icons.wifi_off)),
-                    ],
-                  ),
-                  const SizedBox(height: 9),
-                  GestureDetector(
-                    onTapDown: (_) => startHolding(),
-                    onTapUp: (_) => stopHolding(),
-                    onTapCancel: stopHolding,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 120),
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: sosRed,
-                        borderRadius: BorderRadius.circular(13),
-                        boxShadow: [
-                          BoxShadow(color: sosRed.withOpacity(0.17), blurRadius: 12, offset: const Offset(0, 4)),
-                        ],
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          if (isHolding)
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(13),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: FractionallySizedBox(
-                                    widthFactor: holdProgress.clamp(0.0, 1.0),
-                                    child: Container(color: const Color(0xFF8E1914)),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          Center(
-                            child: Text(
-                              sosSent
-                                  ? 'SOS Terkirim (Simulasi)'
-                                  : isHolding
-                                      ? 'Tahan ${(5 - holdProgress * 5).ceil()} detik lagi...'
-                                      : 'Tahan 5 detik untuk Kirim SOS',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  TextButton(
-                    onPressed: () {
-                      holdTimer?.cancel();
-                      setState(() {
-                        isHolding = false;
-                        holdProgress = 0;
-                        sosSent = false;
-                      });
-                      Navigator.maybePop(context);
-                    },
-                    style: TextButton.styleFrom(foregroundColor: primaryGreen),
-                    child: const Text('Batalkan', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                  ),
-                  const SizedBox(height: 13),
-                  Container(
-                    padding: const EdgeInsets.all(11),
-                    decoration: BoxDecoration(color: const Color(0xFFFFEAE7), borderRadius: BorderRadius.circular(12)),
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.warning_amber_rounded, color: Color(0xFFB3261E), size: 19),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Penting', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Color(0xFF8F211C))),
-                              SizedBox(height: 3),
-                              Text(
-                                'SOS adalah fitur pendukung dan bukan pengganti layanan penyelamatan resmi.',
-                                style: TextStyle(fontSize: 8, height: 1.45, color: Color(0xFF8A514D)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // PILIHAN MODE ONLINE / OFFLINE
-  Widget modeButton(String mode, IconData icon) {
-    final bool isSelected = selectedMode == mode;
-    return GestureDetector(
-      onTap: () {
-        setState(() => selectedMode = mode);
-        if (mode == 'Offline') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Mode Offline aktif untuk simulasi. Pengiriman SOS tidak benar-benar dilakukan.')),
-          );
-        }
-      },
-      child: Container(
-        height: 35,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFFFECE9) : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isSelected ? sosRed : const Color(0xFFE6E1DF),
-            width: isSelected ? 1 : 0.9,
-          ),
         ),
-        child: Text(
-          mode.toUpperCase(),
-          style: TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? const Color(0xFF8F211C) : const Color(0xFF393433),
-          ),
-        ),
-      ),
-    );
-  }
 
-  // HALAMAN STATUS SOS
-  Widget buildStatusPage() {
-    return Column(
-      children: [
-        buildHeader('Status SOS'),
-
+        // Konten Utama
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(15, 12, 15, 20),
-            child: Column(
-              children: [
-                // INFORMASI STATUS
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFC62828),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'SOS',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(width: 9),
-
-                    const Expanded(
-                      child: Column(
+            padding: EdgeInsets.symmetric(
+              horizontal: isTablet ? 32 : 20,
+              vertical: isTablet ? 24 : 12,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isWideTablet ? 960 : 540,
+                ),
+                child: isWideTablet
+                    ? Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Alert SOS aktif',
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: Colors.black54,
-                            ),
+                          Expanded(
+                            child: _buildSosIdentityAndLocation(isTablet: true),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            'Sedang diproses',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
+                          const SizedBox(width: 36),
+                          Expanded(
+                            child: _buildSosActionPanel(isTablet: true),
                           ),
                         ],
-                      ),
-                    ),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDDEFE0),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Icon(
-                            Icons.check,
-                            size: 12,
-                            color: Color(0xFF477D50),
-                          ),
-                          SizedBox(width: 3),
-                          Text(
-                            'ONLINE',
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: Color(0xFF477D50),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          _buildSosIdentityAndLocation(isTablet: isTablet),
+                          SizedBox(height: isTablet ? 28 : 22),
+                          _buildSosActionPanel(isTablet: isTablet),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 22),
-
-                // TIMELINE STATUS
-                buildTimelineItem(
-                  title: 'Alert dibuat',
-                  subtitle: '10.48 • Koordinat tersimpan',
-                  isLast: false,
-                ),
-
-                buildTimelineItem(
-                  title: 'Diterima server',
-                  subtitle: 'Selesai',
-                  isLast: false,
-                ),
-
-                buildTimelineItem(
-                  title: 'Diteruskan ke petugas',
-                  subtitle: 'Selesai',
-                  isLast: false,
-                ),
-
-                buildTimelineItem(
-                  title: 'Berhasil dihubungi',
-                  subtitle: 'Selesai',
-                  isLast: true,
-                ),
-
-                const SizedBox(height: 35),
-
-                // PESAN KEAMANAN
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: const Color(0xFFE0E5DF),
-                    ),
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.verified_user_outlined,
-                            color: Color(0xFF287D36),
-                            size: 19,
-                          ),
-                          SizedBox(width: 9),
-                          Text(
-                            'Tetap tenang dan di lokasi aman',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.only(left: 28, top: 7),
-                        child: Text(
-                          'Status akan diperbarui otomatis. Jangan berpindah kecuali lokasi tidak aman.',
-                          style: TextStyle(
-                            fontSize: 9,
-                            height: 1.5,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEEF1ED),
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  child: const Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        color: Colors.black54,
-                        size: 19,
-                      ),
-                      SizedBox(width: 9),
-                      Expanded(
-                        child: Text(
-                          'SOS adalah fitur pendukung dan bukan pengganti layanan penyelamatan resmi.',
-                          style: TextStyle(
-                            fontSize: 9,
-                            height: 1.4,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -574,66 +165,715 @@ class _SosPageState extends State<SosPage> {
     );
   }
 
-  // ITEM TIMELINE
+  // Bagian Kiri / Atas: Ikon SOS, Judul, dan Koordinat
+  Widget _buildSosIdentityAndLocation({required bool isTablet}) {
+    final double outerCircle = isTablet ? 116 : 92;
+    final double innerCircle = isTablet ? 90 : 72;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: Container(
+            width: outerCircle,
+            height: outerCircle,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFFFCEAE7),
+              boxShadow: [
+                BoxShadow(
+                  color: sosRed.withValues(alpha: 0.06),
+                  blurRadius: 3,
+                  spreadRadius: 7,
+                ),
+              ],
+            ),
+            child: Center(
+              child: Container(
+                width: innerCircle,
+                height: innerCircle,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: sosRed,
+                  boxShadow: [
+                    BoxShadow(
+                      color: sosRed.withValues(alpha: 0.16),
+                      blurRadius: 12,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'SOS',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: isTablet ? 22 : 18,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: isTablet ? 22 : 17),
+        Text(
+          'Kirim SOS?',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: const Color(0xFF8F211C),
+            fontSize: isTablet ? 30 : 24,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Koordinat terakhir dan profil keselamatanmu akan dikirim ke server dan kontak darurat.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: isTablet ? 14.5 : 12.5,
+            height: 1.55,
+            color: const Color(0xFF77716F),
+          ),
+        ),
+        SizedBox(height: isTablet ? 24 : 16),
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 20 : 14,
+            vertical: isTablet ? 20 : 14,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE7E1DF)),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0A000000),
+                blurRadius: 8,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Text(
+                'KOORDINAT TERAKHIR',
+                style: TextStyle(
+                  fontSize: isTablet ? 11 : 10,
+                  letterSpacing: 0.6,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF77716F),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '-6.7710, 106.9867',
+                style: TextStyle(
+                  fontSize: isTablet ? 20 : 16,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF202827),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Akurasi ± 6 m • sekarang',
+                style: TextStyle(
+                  fontSize: isTablet ? 12.5 : 11,
+                  color: const Color(0xFF898381),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Bagian Kanan / Bawah: Kontak Darurat, Mode, Tombol Tahan SOS, dan Peringatan
+  Widget _buildSosActionPanel({required bool isTablet}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Kontak yang akan diberi tahu',
+          style: TextStyle(
+            fontSize: isTablet ? 14 : 12,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF302B2A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: EdgeInsets.all(isTablet ? 14 : 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFFE7E1DF)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: isTablet ? 46 : 38,
+                height: isTablet ? 46 : 38,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFDDEEDD),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'DP',
+                  style: TextStyle(
+                    color: const Color(0xFF286334),
+                    fontWeight: FontWeight.bold,
+                    fontSize: isTablet ? 14 : 12,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Dina Pratama',
+                      style: TextStyle(
+                        fontSize: isTablet ? 14.5 : 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3A3533),
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Kontak utama • +62 813 8877 2100',
+                      style: TextStyle(
+                        fontSize: isTablet ? 12.5 : 11,
+                        color: const Color(0xFF817B79),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: isTablet ? 16 : 12),
+        Row(
+          children: [
+            Expanded(child: modeButton('Online', Icons.wifi, isTablet: isTablet)),
+            const SizedBox(width: 10),
+            Expanded(child: modeButton('Offline', Icons.wifi_off, isTablet: isTablet)),
+          ],
+        ),
+        SizedBox(height: isTablet ? 16 : 12),
+        GestureDetector(
+          onTapDown: (_) => startHolding(),
+          onTapUp: (_) => stopHolding(),
+          onTapCancel: stopHolding,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 120),
+            height: isTablet ? 56 : 48,
+            decoration: BoxDecoration(
+              color: sosRed,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: sosRed.withValues(alpha: 0.17),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (isHolding)
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: FractionallySizedBox(
+                          widthFactor: holdProgress.clamp(0.0, 1.0),
+                          child: Container(color: const Color(0xFF8E1914)),
+                        ),
+                      ),
+                    ),
+                  ),
+                Center(
+                  child: Text(
+                    sosSent
+                        ? 'SOS Terkirim (Simulasi)'
+                        : isHolding
+                            ? 'Tahan ${(5 - holdProgress * 5).ceil()} detik lagi...'
+                            : 'Tahan 5 detik untuk Kirim SOS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isTablet ? 15 : 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextButton(
+          onPressed: () {
+            holdTimer?.cancel();
+            setState(() {
+              isHolding = false;
+              holdProgress = 0;
+              sosSent = false;
+            });
+            Navigator.maybePop(context);
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: primaryGreen,
+            padding: EdgeInsets.symmetric(vertical: isTablet ? 14 : 10),
+          ),
+          child: Text(
+            'Batalkan',
+            style: TextStyle(
+              fontSize: isTablet ? 14.5 : 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(height: isTablet ? 16 : 12),
+        Container(
+          padding: EdgeInsets.all(isTablet ? 16 : 12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFEAE7),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: const Color(0xFFB3261E),
+                size: isTablet ? 22 : 19,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Penting',
+                      style: TextStyle(
+                        fontSize: isTablet ? 12.5 : 11,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF8F211C),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'SOS adalah fitur pendukung dan bukan pengganti layanan penyelamatan resmi.',
+                      style: TextStyle(
+                        fontSize: isTablet ? 12 : 10.5,
+                        height: 1.45,
+                        color: const Color(0xFF8A514D),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // PILIHAN MODE ONLINE / OFFLINE
+  Widget modeButton(String mode, IconData icon, {required bool isTablet}) {
+    final bool isSelected = selectedMode == mode;
+    return GestureDetector(
+      onTap: () {
+        setState(() => selectedMode = mode);
+        if (mode == 'Offline') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Mode Offline aktif untuk simulasi. Pengiriman SOS tidak benar-benar dilakukan.',
+              ),
+            ),
+          );
+        }
+      },
+      child: Container(
+        height: isTablet ? 44 : 38,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFFECE9) : Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? sosRed : const Color(0xFFE6E1DF),
+            width: isSelected ? 1.2 : 0.9,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: isTablet ? 16 : 14,
+              color: isSelected ? const Color(0xFF8F211C) : const Color(0xFF393433),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              mode.toUpperCase(),
+              style: TextStyle(
+                fontSize: isTablet ? 12 : 10.5,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? const Color(0xFF8F211C) : const Color(0xFF393433),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ===========================================================================
+  // HALAMAN STATUS SOS (ADAPTIVE)
+  // ===========================================================================
+  Widget buildStatusPage({
+    required bool isTablet,
+    required bool isWideTablet,
+  }) {
+    return Column(
+      children: [
+        buildHeader('Status SOS', isTablet: isTablet),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: isTablet ? 32 : 16,
+              vertical: isTablet ? 24 : 16,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isWideTablet ? 960 : 540,
+                ),
+                child: isWideTablet
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _buildStatusSummaryAndSafety(isTablet: true),
+                          ),
+                          const SizedBox(width: 36),
+                          Expanded(
+                            child: _buildTimelineCard(isTablet: true),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          _buildStatusHeaderBanner(isTablet: isTablet),
+                          SizedBox(height: isTablet ? 28 : 22),
+                          _buildTimelineList(isTablet: isTablet),
+                          SizedBox(height: isTablet ? 32 : 24),
+                          _buildSafetyCards(isTablet: isTablet),
+                        ],
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusSummaryAndSafety({required bool isTablet}) {
+    return Column(
+      children: [
+        _buildStatusHeaderBanner(isTablet: isTablet),
+        const SizedBox(height: 24),
+        _buildSafetyCards(isTablet: isTablet),
+      ],
+    );
+  }
+
+  Widget _buildTimelineCard({required bool isTablet}) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE4E6E0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Progres Penanganan',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF202827),
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildTimelineList(isTablet: isTablet),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusHeaderBanner({required bool isTablet}) {
+    return Row(
+      children: [
+        Container(
+          width: isTablet ? 48 : 40,
+          height: isTablet ? 48 : 40,
+          decoration: const BoxDecoration(
+            color: Color(0xFFC62828),
+            shape: BoxShape.circle,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'SOS',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: isTablet ? 14 : 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Alert SOS aktif',
+                style: TextStyle(
+                  fontSize: isTablet ? 12.5 : 11,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Sedang diproses',
+                style: TextStyle(
+                  fontSize: isTablet ? 18 : 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 14 : 10,
+            vertical: isTablet ? 8 : 6,
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xFFDDEFE0),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.check,
+                size: isTablet ? 15 : 12,
+                color: const Color(0xFF477D50),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                'ONLINE',
+                style: TextStyle(
+                  fontSize: isTablet ? 11.5 : 10,
+                  color: const Color(0xFF477D50),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimelineList({required bool isTablet}) {
+    return Column(
+      children: [
+        buildTimelineItem(
+          title: 'Alert dibuat',
+          subtitle: '10.48 • Koordinat tersimpan',
+          isLast: false,
+          isTablet: isTablet,
+        ),
+        buildTimelineItem(
+          title: 'Diterima server',
+          subtitle: 'Selesai',
+          isLast: false,
+          isTablet: isTablet,
+        ),
+        buildTimelineItem(
+          title: 'Diteruskan ke petugas',
+          subtitle: 'Selesai',
+          isLast: false,
+          isTablet: isTablet,
+        ),
+        buildTimelineItem(
+          title: 'Berhasil dihubungi',
+          subtitle: 'Selesai',
+          isLast: true,
+          isTablet: isTablet,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSafetyCards({required bool isTablet}) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(isTablet ? 18 : 14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: const Color(0xFFE0E5DF)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.verified_user_outlined,
+                    color: const Color(0xFF287D36),
+                    size: isTablet ? 22 : 19,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Tetap tenang dan di lokasi aman',
+                      style: TextStyle(
+                        fontSize: isTablet ? 14 : 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: isTablet ? 32 : 29, top: 7),
+                child: Text(
+                  'Status akan diperbarui otomatis. Jangan berpindah kecuali lokasi tidak aman.',
+                  style: TextStyle(
+                    fontSize: isTablet ? 13 : 11,
+                    height: 1.5,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(isTablet ? 16 : 12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEEF1ED),
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.black54,
+                size: isTablet ? 22 : 19,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'SOS adalah fitur pendukung dan bukan pengganti layanan penyelamatan resmi.',
+                  style: TextStyle(
+                    fontSize: isTablet ? 12.5 : 10.5,
+                    height: 1.45,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ITEM TIMELINE (DINAMIS DENGAN INTRINSIC HEIGHT)
   Widget buildTimelineItem({
     required String title,
     required String subtitle,
     required bool isLast,
+    required bool isTablet,
   }) {
-    return SizedBox(
-      height: 65,
+    final double circleSize = isTablet ? 36 : 32;
+
+    return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            width: 38,
+            width: isTablet ? 44 : 38,
             child: Column(
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: circleSize,
+                  height: circleSize,
                   decoration: BoxDecoration(
                     color: primaryGreen,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check,
                     color: Colors.white,
-                    size: 21,
+                    size: isTablet ? 22 : 19,
                   ),
                 ),
-
                 if (!isLast)
                   Expanded(
                     child: Container(
-                      width: 1.5,
+                      width: 2,
                       color: primaryGreen,
                     ),
                   ),
               ],
             ),
           ),
-
-          const SizedBox(width: 8),
-
+          const SizedBox(width: 10),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: EdgeInsets.only(
+                top: 4,
+                bottom: isLast ? 0 : (isTablet ? 24 : 20),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 10,
+                    style: TextStyle(
+                      fontSize: isTablet ? 14 : 12,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      fontSize: 9,
+                    style: TextStyle(
+                      fontSize: isTablet ? 12.5 : 11,
                       color: Colors.black54,
                     ),
                   ),
@@ -647,39 +887,31 @@ class _SosPageState extends State<SosPage> {
   }
 
   // HEADER HALAMAN
-  Widget buildHeader(String title) {
+  Widget buildHeader(String title, {required bool isTablet}) {
     return Container(
-      height: 58,
+      height: isTablet ? 66 : 58,
+      padding: EdgeInsets.symmetric(horizontal: isTablet ? 12 : 4),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            color: Color(0xFFE4E6E0),
-          ),
+          bottom: BorderSide(color: Color(0xFFE4E6E0)),
         ),
       ),
       child: Row(
         children: [
           IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-              size: 19,
-            ),
+            onPressed: () => Navigator.maybePop(context),
+            icon: Icon(Icons.arrow_back_ios_new, size: isTablet ? 21 : 19),
           ),
-
           Expanded(
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 15,
+              style: TextStyle(
+                fontSize: isTablet ? 18 : 15,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-
           const SizedBox(width: 48),
         ],
       ),
