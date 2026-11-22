@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
       title: 'Puncak Track',
       debugShowCheckedModeBanner: false,
 
-      useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 

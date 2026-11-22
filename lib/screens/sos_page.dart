@@ -119,7 +119,7 @@ class _SosPageState extends State<SosPage> {
                         color: const Color(0xFFFCEAE7),
                         boxShadow: [
                           BoxShadow(
-                            color: sosRed.withOpacity(0.06),
+                            color: sosRed.withValues(alpha: 0.5),
                             blurRadius: 3,
                             spreadRadius: 7,
                           ),
@@ -134,7 +134,7 @@ class _SosPageState extends State<SosPage> {
                             color: sosRed,
                             boxShadow: [
                               BoxShadow(
-                                color: sosRed.withOpacity(0.16),
+                                color: sosRed.withValues(alpha: 0.5),
                                 blurRadius: 12,
                                 offset: const Offset(0, 5),
                               ),
@@ -255,7 +255,7 @@ class _SosPageState extends State<SosPage> {
                         color: sosRed,
                         borderRadius: BorderRadius.circular(13),
                         boxShadow: [
-                          BoxShadow(color: sosRed.withOpacity(0.17), blurRadius: 12, offset: const Offset(0, 4)),
+                          BoxShadow(color: sosRed.withValues(alpha: 0.5), blurRadius: 12, offset: const Offset(0, 4)),
                         ],
                       ),
                       child: Stack(

@@ -653,7 +653,7 @@ class SafetyProfilePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: chipBackground,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Text(
         label,
